@@ -2,10 +2,11 @@ package com.thoughtworks.capability.gtb.restfulapidesign.service;
 
 import com.thoughtworks.capability.gtb.restfulapidesign.domain.Student;
 import com.thoughtworks.capability.gtb.restfulapidesign.domain.Team;
+import com.thoughtworks.capability.gtb.restfulapidesign.exception.BussinessException;
+import com.thoughtworks.capability.gtb.restfulapidesign.exception.ExceptionEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -35,5 +36,14 @@ public class TeamService {
             start = end;
         }
         return TEAMS;
+    }
+
+    public Team updateByTeamName(int id, String teamName) {
+        Team updateTeam = TEAMS.stream()
+                .filter(team -> team.getId() == id)
+                .findFirst()
+                .orElseThrow(() -> new BussinessException(ExceptionEnum.NOT_FIND_TEAM));
+        updateTeam.setName(teamName);
+        return updateTeam;
     }
 }
