@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -40,7 +41,7 @@ class StudentControllerTest {
     @Test
     public void should_add_student() throws Exception {
         Student student = Student.builder()
-                .name("zhangsan")
+                .name("huxiao")
                 .note("")
                 .gender(Gender.FEMALE)
                 .build();
@@ -52,7 +53,14 @@ class StudentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(string);
         result = mockMvc.perform(url);
-        result.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.name",Matchers.is("zhangsan")));
+        result.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(4)))
+        .andExpect(MockMvcResultMatchers.jsonPath("$.name",Matchers.is("huxiao")));
+    }
+
+    @Test
+    public void should_delete_student_by_id() throws Exception {
+        MockHttpServletRequestBuilder deleteURL = MockMvcRequestBuilders.delete("http://localhost:8080/api/v1/students/1");
+        mockMvc.perform(deleteURL).andExpect(MockMvcResultMatchers.status().isNoContent());
+
     }
 }
