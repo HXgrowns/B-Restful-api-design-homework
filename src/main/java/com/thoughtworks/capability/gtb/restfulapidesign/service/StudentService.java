@@ -25,9 +25,9 @@ public class StudentService {
         return student;
     }
 
-    public void delete(Integer id) {
+    public void delete(int id) {
         Student deleteStudent = students.stream()
-                .filter(student -> student.getId().equals(id))
+                .filter(student -> id == student.getId())
                 .findFirst()
                 .orElseThrow(() -> new BussinessException(ExceptionEnum.NOT_FIND_STUDENT));
         students.remove(deleteStudent);
@@ -37,7 +37,14 @@ public class StudentService {
         if(gender == null) {
             return students;
         }
-        return students.stream().filter(student -> student.getGender().equals(gender))
+
+        return students.stream().filter(student -> gender == student.getGender())
                 .collect(Collectors.toList());
+    }
+
+    public Student findById(int id) {
+        return students.stream().filter(student -> student.getId() == id)
+                .findFirst()
+                .orElse(null);
     }
 }

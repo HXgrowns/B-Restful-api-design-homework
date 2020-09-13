@@ -50,18 +50,19 @@ class StudentControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String studentString = objectMapper.writeValueAsString(student);
 
-        MockHttpServletRequestBuilder url = MockMvcRequestBuilders.post("http://localhost:8080/api/v1/students")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("http://localhost:8080/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(studentString);
-        result = mockMvc.perform(url);
+        result = mockMvc.perform(request);
         result.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(4)))
-        .andExpect(MockMvcResultMatchers.jsonPath("$.name",Matchers.is("huxiao")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is("huxiao")));
     }
 
     @Test
     public void should_delete_student_by_id() throws Exception {
-        MockHttpServletRequestBuilder deleteURL = MockMvcRequestBuilders.delete("http://localhost:8080/api/v1/students/1");
-        mockMvc.perform(deleteURL).andExpect(MockMvcResultMatchers.status().isNoContent());
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.delete("http://localhost:8080/api/v1/students/1");
+        result = mockMvc.perform(request);
+        result.andExpect(MockMvcResultMatchers.status().isNoContent());
 
     }
 
@@ -69,11 +70,20 @@ class StudentControllerTest {
     public void should_find_students_by_Gender() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String genderString = objectMapper.writeValueAsString(Gender.MALE);
-        MockHttpServletRequestBuilder findURL = MockMvcRequestBuilders.get("http://localhost:8080/api/v1/students")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("http://localhost:8080/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(genderString);
-        mockMvc.perform(findURL)
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        result = mockMvc.perform(request);
+        result.andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("lisi")));
+    }
+
+    @Test
+    public void should_find_student_by_id() throws Exception {
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("http://localhost:8080/api/v1/students/1");
+        result = mockMvc.perform(request);
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is("zhangsan")));
+
     }
 }

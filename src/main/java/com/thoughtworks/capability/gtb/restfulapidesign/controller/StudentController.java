@@ -25,12 +25,17 @@ public class StudentController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer id) {
+    public void delete(@PathVariable int id) {
         studentService.delete(id);
     }
 
     @GetMapping
     public ResponseEntity<List<Student>> findAllByGender(@RequestParam(required = false) Gender gender) {
         return ResponseEntity.ok().body(studentService.findAllByGender(gender));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> findById(@PathVariable int id) {
+        return ResponseEntity.ok().body(studentService.findById(id));
     }
 }
