@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -30,5 +31,13 @@ public class StudentService {
                 .findFirst()
                 .orElseThrow(() -> new BussinessException(ExceptionEnum.NOT_FIND_STUDENT));
         students.remove(deleteStudent);
+    }
+
+    public List<Student> findAllByGender(Gender gender) {
+        if(gender == null) {
+            return students;
+        }
+        return students.stream().filter(student -> student.getGender().equals(gender))
+                .collect(Collectors.toList());
     }
 }

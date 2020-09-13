@@ -1,5 +1,6 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.capability.gtb.restfulapidesign.domain.Gender;
 import com.thoughtworks.capability.gtb.restfulapidesign.domain.Student;
@@ -47,11 +48,11 @@ class StudentControllerTest {
                 .build();
 
         ObjectMapper objectMapper = new ObjectMapper();
-        String string = objectMapper.writeValueAsString(student);
+        String studentString = objectMapper.writeValueAsString(student);
 
         MockHttpServletRequestBuilder url = MockMvcRequestBuilders.post("http://localhost:8080/api/v1/students")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(string);
+                .content(studentString);
         result = mockMvc.perform(url);
         result.andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(4)))
         .andExpect(MockMvcResultMatchers.jsonPath("$.name",Matchers.is("huxiao")));
@@ -62,5 +63,17 @@ class StudentControllerTest {
         MockHttpServletRequestBuilder deleteURL = MockMvcRequestBuilders.delete("http://localhost:8080/api/v1/students/1");
         mockMvc.perform(deleteURL).andExpect(MockMvcResultMatchers.status().isNoContent());
 
+    }
+
+    @Test
+    public void should_find_students_by_Gender() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String genderString = objectMapper.writeValueAsString(Gender.MALE);
+        MockHttpServletRequestBuilder findURL = MockMvcRequestBuilders.get("http://localhost:8080/api/v1/students")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(genderString);
+        mockMvc.perform(findURL)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("lisi")));
     }
 }
