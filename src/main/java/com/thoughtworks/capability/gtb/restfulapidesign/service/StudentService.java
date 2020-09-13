@@ -14,36 +14,36 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
-    private final List<Student> students = new ArrayList<>(Arrays.asList(
+    public static final List<Student> STUDENTS = new ArrayList<>(Arrays.asList(
             new Student(1, "zhangsan", Gender.FEMALE, ""),
             new Student(2, "lisi", Gender.MALE, ""),
             new Student(3, "wangwu", Gender.FEMALE, "")));
 
     public Student addStudent(Student student) {
-        student.setId(students.size() + 1);
-        students.add(student);
+        student.setId(STUDENTS.size() + 1);
+        STUDENTS.add(student);
         return student;
     }
 
     public void delete(int id) {
-        Student deleteStudent = students.stream()
+        Student deleteStudent = STUDENTS.stream()
                 .filter(student -> id == student.getId())
                 .findFirst()
                 .orElseThrow(() -> new BussinessException(ExceptionEnum.NOT_FIND_STUDENT));
-        students.remove(deleteStudent);
+        STUDENTS.remove(deleteStudent);
     }
 
     public List<Student> findAllByGender(Gender gender) {
         if (gender == null) {
-            return students;
+            return STUDENTS;
         }
 
-        return students.stream().filter(student -> gender == student.getGender())
+        return STUDENTS.stream().filter(student -> gender == student.getGender())
                 .collect(Collectors.toList());
     }
 
     public Student findById(int id) {
-        return students.stream().filter(student -> student.getId() == id)
+        return STUDENTS.stream().filter(student -> student.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
@@ -52,9 +52,9 @@ public class StudentService {
         if (newStudent == null || newStudent.getId() == null) {
             throw new BussinessException(ExceptionEnum.PARAM_IS_INVALID);
         }
-        for (int i = 0; i < students.size(); i++) {
-            if(newStudent.getId().equals(students.get(i).getId())) {
-                students.set(i,newStudent);
+        for (int i = 0; i < STUDENTS.size(); i++) {
+            if(newStudent.getId().equals(STUDENTS.get(i).getId())) {
+                STUDENTS.set(i,newStudent);
                 return newStudent;
             }
         }

@@ -1,6 +1,5 @@
 package com.thoughtworks.capability.gtb.restfulapidesign.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thoughtworks.capability.gtb.restfulapidesign.domain.Gender;
 import com.thoughtworks.capability.gtb.restfulapidesign.domain.Student;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -70,7 +68,7 @@ class StudentControllerTest {
     public void should_find_students_by_Gender() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         String genderString = objectMapper.writeValueAsString(Gender.MALE);
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("http://localhost:8080/api/v1/students")
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get("http://localhost:8080/api/v1/students?gender=MALE")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(genderString);
         result = mockMvc.perform(request);
