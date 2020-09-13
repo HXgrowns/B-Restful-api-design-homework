@@ -38,4 +38,9 @@ public class StudentController {
     public ResponseEntity<Student> findById(@PathVariable int id) {
         return ResponseEntity.ok().body(studentService.findById(id));
     }
+
+    @PutMapping
+    public ResponseEntity<Student> update(@RequestBody Student student ) {
+        return ResponseEntity.ok().body(studentService.update(student));
+    }
 }

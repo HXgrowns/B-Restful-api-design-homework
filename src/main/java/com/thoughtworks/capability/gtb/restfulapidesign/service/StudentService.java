@@ -34,7 +34,7 @@ public class StudentService {
     }
 
     public List<Student> findAllByGender(Gender gender) {
-        if(gender == null) {
+        if (gender == null) {
             return students;
         }
 
@@ -46,5 +46,18 @@ public class StudentService {
         return students.stream().filter(student -> student.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Student update(Student newStudent) {
+        if (newStudent == null || newStudent.getId() == null) {
+            throw new BussinessException(ExceptionEnum.PARAM_IS_INVALID);
+        }
+        for (int i = 0; i < students.size(); i++) {
+            if(newStudent.getId().equals(students.get(i).getId())) {
+                students.set(i,newStudent);
+                return newStudent;
+            }
+        }
+        throw new BussinessException(ExceptionEnum.NOT_FIND_STUDENT) ;
     }
 }

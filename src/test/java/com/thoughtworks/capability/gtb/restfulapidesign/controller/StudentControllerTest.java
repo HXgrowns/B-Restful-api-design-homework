@@ -86,4 +86,24 @@ class StudentControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name", Matchers.is("zhangsan")));
 
     }
+
+    @Test
+    public void should_update_student() throws Exception {
+        Student student = Student.builder()
+                .id(1)
+                .name("huxiao")
+                .note("")
+                .gender(Gender.FEMALE)
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String studentString = objectMapper.writeValueAsString(student);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("http://localhost:8080/api/v1/students")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(studentString);
+        result = mockMvc.perform(request);
+        result.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name",Matchers.is("huxiao")));
+    }
 }
