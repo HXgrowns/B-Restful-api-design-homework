@@ -43,7 +43,7 @@ class TeamControllerTest {
 
     @Test
     public void should_update_team_name() throws Exception {
-        result = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/api/vi/teams?teamCount=6"));
+        result = mockMvc.perform(MockMvcRequestBuilders.post("http://localhost:8080/api/vi/teams?teamCount=6"));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.patch("http://localhost:8080/api/vi/teams/1?teamName=haha");
         result = mockMvc.perform(request);

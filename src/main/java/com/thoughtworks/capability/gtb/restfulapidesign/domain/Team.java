@@ -22,4 +22,14 @@ public class Team {
         this.name = "Team " + id;
         this.students = students;
     }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", note='" + note + '\'' +
+                ", students=" + students +
+                '}';
+    }
 }

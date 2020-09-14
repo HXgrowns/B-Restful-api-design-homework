@@ -18,7 +18,7 @@ public class StudentController {
         this.studentService = studentService;
     }
     @PostMapping
-    public ResponseEntity<Student> addStudent(@RequestBody Student student) {
+    public ResponseEntity<Student> addStudent(@RequestBody  Student student) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(studentService.addStudent(student));
     }

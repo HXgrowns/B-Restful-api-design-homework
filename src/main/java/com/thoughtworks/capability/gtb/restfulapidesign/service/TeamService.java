@@ -12,9 +12,10 @@ import java.util.List;
 
 @Service
 public class TeamService {
-    private static final List<Team> TEAMS = new ArrayList<>();
+    private static List<Team> teams = new ArrayList<>();
 
-    public List<Team> getTeams(int teamCount) {
+    public List<Team> createTeam(int teamCount) {
+        teams = new ArrayList<>();
         List<Student> students = new ArrayList<>(StudentService.STUDENTS);
 
         int teamSize = students.size() / teamCount;
@@ -23,27 +24,34 @@ public class TeamService {
         Collections.shuffle(students);
 
         int start = 0;
-        int end = 0;
         for (int i = 0; i < teamCount; i++) {
-            if (studentRestCount > 0) {
-                end = start + teamSize + 1;
-                studentRestCount--;
-            } else {
-                end = start + teamSize;
-            }
-            List<Student> subStudents = students.subList(start, end);
-            TEAMS.add(new Team(i + 1, subStudents));
-            start = end;
+            List<Student> subStudents = students.subList(start, start + teamSize);
+            Team creatTeam = new Team(i + 1, subStudents);
+            teams.add(creatTeam);
+            start += teamSize;
         }
-        return TEAMS;
+
+        for (int i = 0; i < studentRestCount; i++) {
+            List<Student> teamStudents = teams.get(i).getStudents();
+            List<Student> resStudent = students.subList(start, start + 1);
+            teams.get(i).setStudents(new ArrayList<>());
+            teams.get(i).getStudents().addAll(teamStudents);
+            teams.get(i).getStudents().addAll(resStudent);
+            start += 1;
+        }
+        return teams;
     }
 
     public Team updateByTeamName(int id, String teamName) {
-        Team updateTeam = TEAMS.stream()
+        Team updateTeam = teams.stream()
                 .filter(team -> team.getId() == id)
                 .findFirst()
                 .orElseThrow(() -> new BussinessException(ExceptionEnum.NOT_FIND_TEAM));
         updateTeam.setName(teamName);
         return updateTeam;
+    }
+
+    public List<Team> findTeams() {
+        return teams;
     }
 }
